@@ -1,0 +1,77 @@
+{
+  "providers": [
+    {
+      "name": "openrouter",
+      "priority": 1,
+      "enabled": true,
+      "models": [
+        "openrouter/stepfun/step-3.5-flash:free"
+      ],
+      "apiKeyEnv": "OPENROUTER_API_KEY",
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "tokensPerMinute": 100000
+      },
+      "fallback": true,
+      "timeoutMs": 30000,
+      "healthCheckUrl": "https://openrouter.ai/api/v1/models",
+      "offlineAfterFailures": 3
+    },
+    {
+      "name": "google_ai_studio",
+      "priority": 2,
+      "enabled": true,
+      "apiKeyEnv": "GOOGLE_AI_STUDIO_KEY",
+      "models": [
+        "gemini-1.5-pro"
+      ],
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta/models",
+      "fallback": true,
+      "timeoutMs": 30000,
+      "offlineAfterFailures": 3
+    },
+    {
+      "name": "local_ollama",
+      "priority": 3,
+      "enabled": true,
+      "endpoint": "http://localhost:11434",
+      "models": [
+        "llama2:7b",
+        "mistral:7b"
+      ],
+      "fallback": true,
+      "timeoutMs": 60000,
+      "offlineAfterFailures": 1,
+      "offlineCapable": true
+    },
+    {
+      "name": "local_claude",
+      "priority": 4,
+      "enabled": false,
+      "endpoint": "http://localhost:8080",
+      "models": [
+        "claude-3-haiku-20240307"
+      ],
+      "fallback": true,
+      "timeoutMs": 60000,
+      "offlineCapable": false
+    }
+  ],
+  "strategy": "auto_failover",
+  "circuitBreaker": {
+    "enabled": true,
+    "failureThreshold": 3,
+    "recoveryTimeoutMs": 30000,
+    "halfOpenMaxCalls": 5
+  },
+  "defaultProvider": "openrouter",
+  "offlineModeFallback": "local_ollama",
+  "cache": {
+    "enabled": true,
+    "ttlMinutes": 5,
+    "maxEntries": 1000
+  },
+  "logRequests": false,
+  "monitorHealth": true,
+  "healthCheckIntervalSeconds": 30
+}
