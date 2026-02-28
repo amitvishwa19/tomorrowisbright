@@ -1,0 +1,31 @@
+[Unit]
+Description=OpenClaw Gateway Service
+Documentation=https://docs.openclaw.ai
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=Administrator
+WorkingDirectory=/home/Administrator
+ExecStart=/usr/bin/node /home/Administrator/AppData/Roaming/npm/node_modules/openclaw/dist/index.js gateway --port 18789
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+Environment=OPENCLAW_GATEWAY_PORT=18789
+Environment=OPENCLAW_TOKEN=8e25c23bbae32955a783916068267e38698dcd5e380835b3
+# Health check
+ExecStartPost=/bin/sleep 2
+# Watchdog (will restart if no output for 30s)
+WatchdogSec=30
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/home/Administrator/.openclaw /tmp
+
+[Install]
+WantedBy=multi-user.target

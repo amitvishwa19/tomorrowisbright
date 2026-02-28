@@ -1,0 +1,48 @@
+{
+  "providers": [
+    {
+      "name": "openrouter",
+      "priority": 1,
+      "enabled": true,
+      "models": [
+        "openrouter/stepfun/step-3.5-flash:free"
+      ],
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "tokensPerMinute": 100000
+      },
+      "fallback": true,
+      "timeoutMs": 30000
+    },
+    {
+      "name": "google_ai_studio",
+      "priority": 2,
+      "enabled": false,
+      "apiKeyEnv": "GOOGLE_AI_STUDIO_KEY",
+      "models": [
+        "gemini-1.5-pro"
+      ],
+      "fallback": true,
+      "timeoutMs": 30000
+    },
+    {
+      "name": "local_ollama",
+      "priority": 3,
+      "enabled": false,
+      "endpoint": "http://localhost:11434",
+      "models": [
+        "llama2:7b"
+      ],
+      "fallback": true,
+      "timeoutMs": 60000
+    }
+  ],
+  "strategy": "auto_failover",
+  "circuitBreaker": {
+    "enabled": true,
+    "failureThreshold": 3,
+    "recoveryTimeoutMs": 30000
+  },
+  "defaultProvider": "openrouter",
+  "logRequests": false
+}
